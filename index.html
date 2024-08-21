@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PinDuoDuo Shop Info Exporter</title>
+  </head>
+  <body>
+    <button id="exportButton">Export Shopping Info</button>
+
+    <script>
+      document.getElementById('exportButton').addEventListener('click', () => {
+        window.api.exportShoppingInfo();
+      });
+    </script>
+  </body>
+</html>
