@@ -30,6 +30,12 @@ function createWindow () {
             win.webContents.send('export-shopping-info');
           }
         },
+        {
+          label: 'Go Back',
+          click: () => {
+            win.webContents.goBack();
+          }
+        },
         { type: 'separator' },
         { role: 'quit' }
       ]
