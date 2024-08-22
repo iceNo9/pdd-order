@@ -1,5 +1,5 @@
-﻿const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path'); // 添加这一行
+﻿const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const path = require('path');
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -9,7 +9,7 @@ function createWindow () {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
-      preload: path.join(__dirname, 'preload.js') // 使用 path 模块
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -18,18 +18,27 @@ function createWindow () {
 
   // Optionally open the DevTools.
   // win.webContents.openDevTools();
-  
-  // Listen for the 'login-success' event from the renderer process.
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.executeJavaScript(`
-      document.body.insertAdjacentHTML('beforeend', \`
-        <button id="exportButton">Export Shopping Info</button>
-      \`);
-      document.getElementById('exportButton').addEventListener('click', () => {
-        window.api.exportShoppingInfo();
-      });
-    `);
-  });
+
+  // Set up the menu
+  const template = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Export Shopping Info',
+          click: () => {
+            win.webContents.send('export-shopping-info');
+          }
+        },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    }
+  ];
+
+  // Create the menu
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 }
 
 app.whenReady().then(createWindow);
